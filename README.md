@@ -36,7 +36,7 @@ The project is currently under development.
 4. Start the backend:
 
    ```bash
-   uvicorn backend.main:app --reload
+   python -m uvicorn backend.main:app --reload
    ```
 
 5. Open `http://127.0.0.1:8000` in your browser.
