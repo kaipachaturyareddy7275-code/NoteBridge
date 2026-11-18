@@ -30,24 +30,30 @@ The project is currently under development.
 
 ## Project Architecture
 
-The planned application consists of:
+NoteBridge follows a simple full-stack architecture consisting of four main components:
 
-1. **Frontend:** Provides the interface for students.
-2. **Backend:** Handles API requests and application logic.
-3. **Database:** Stores resource information and metadata.
-4. **File Storage:** Stores uploaded learning materials.
+1. **Frontend:** Built using HTML, CSS and JavaScript to provide the user interface.
+2. **Backend:** Uses Python and FastAPI to handle API requests, validation and application logic.
+3. **Database:** SQLite is planned to store resource details, topics and other metadata.
+4. **File Storage:** Local storage is planned to maintain uploaded PDF learning materials.
+
+### Communication Flow
+
+Frontend -> FastAPI Backend -> SQLite Database / PDF File Storage
+
+The frontend sends requests to the backend. The backend processes these requests and interacts with the database or file storage when required.
 
 ## Project Structure
 
 ```text
 NoteBridge/
-├── backend/
-│   └── main.py
-├── frontend/
-├── venv/
-├── .gitignore
-├── README.md
-└── requirements.txt
+|-- backend/
+|   |-- main.py
+|-- frontend/
+|-- docs/
+|-- .gitignore
+|-- README.md
+|-- requirements.txt
 ```
 
 ## Current Progress
