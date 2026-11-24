@@ -2,6 +2,7 @@ from fastapi import FastAPI
 import os
 from fastapi import UploadFile, File, HTTPException
 from fastapi.responses import FileResponse
+from fastapi import Response
 
 app = FastAPI(title="NoteBridge")
 
@@ -85,3 +86,23 @@ def view_pdf(filename: str):
     filename=filename,
     content_disposition_type="inline"
     )
+    
+@app.delete("/pdfs/{filename}")
+def delete_pdf(filename: str):
+
+    filename = os.path.basename(filename)
+
+    if not filename.lower().endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Only PDF files can be deleted")
+
+    file_path = os.path.join(UPLOAD_FOLDER, filename)
+
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="PDF not found")
+
+    os.remove(file_path)
+
+    return {
+        "message": "PDF deleted successfully",
+        "filename": filename
+    }
