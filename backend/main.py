@@ -3,8 +3,15 @@ import os
 from fastapi import UploadFile, File, HTTPException
 from fastapi.responses import FileResponse
 from fastapi import Response
+from backend.database import create_tables
+from backend.database import insert_document
+from backend.database import get_all_documents
+from backend.database import update_document
+from backend.database import delete_document
 
 app = FastAPI(title="NoteBridge")
+
+create_tables()
 
 UPLOAD_FOLDER = "uploads"
 
@@ -47,6 +54,8 @@ async def upload_pdf(file: UploadFile = File(...)):
 
     with open(file_path, "wb") as f:
         f.write(content)
+        
+    insert_document(filename, file_path)
 
     return {
         "message": "PDF uploaded successfully",
@@ -105,4 +114,40 @@ def delete_pdf(filename: str):
     return {
         "message": "PDF deleted successfully",
         "filename": filename
+    }
+    
+@app.get("/documents")
+def get_documents_from_database():
+    documents = get_all_documents()
+
+    return {
+        "documents": documents,
+        "total": len(documents)
+    }
+    
+@app.put("/documents/{document_id}")
+def update_document_details(document_id: int, new_filename: str):
+
+    updated = update_document(document_id, new_filename)
+
+    if not updated:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    return {
+        "message": "Document updated successfully",
+        "document_id": document_id,
+        "new_filename": new_filename
+    }
+    
+@app.delete("/documents/{document_id}")
+def delete_document_details(document_id: int):
+
+    deleted = delete_document(document_id)
+
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    return {
+        "message": "Document deleted successfully",
+        "document_id": document_id
     }

@@ -1,5 +1,10 @@
-venv/
+# Database
+notebridge.db
+
+# Python
 __pycache__/
-*.py[cod]
-.env
+*.pyc
+venv/
+
+# Uploaded files
 uploads/
