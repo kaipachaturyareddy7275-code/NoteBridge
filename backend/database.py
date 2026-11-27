@@ -53,17 +53,29 @@ def get_all_documents():
 
     return [dict(document) for document in documents]
 
+def get_document_by_id(document_id):
+    conn = get_db_connection()
 
-def update_document(document_id, new_filename):
+    document = conn.execute(
+        "SELECT * FROM documents WHERE id = ?",
+        (document_id,)
+    ).fetchone()
+
+    conn.close()
+
+    return dict(document) if document else None
+
+
+def update_document(document_id, new_filename, new_file_path):
     conn = get_db_connection()
 
     cursor = conn.execute(
         """
         UPDATE documents
-        SET filename = ?
+        SET filename = ?, file_path = ?
         WHERE id = ?
         """,
-        (new_filename, document_id)
+        (new_filename, new_file_path, document_id)
     )
 
     conn.commit()

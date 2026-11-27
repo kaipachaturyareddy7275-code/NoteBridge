@@ -6,6 +6,7 @@ from fastapi import Response
 from backend.database import create_tables
 from backend.database import insert_document
 from backend.database import get_all_documents
+from backend.database import get_document_by_id
 from backend.database import update_document
 from backend.database import delete_document
 
@@ -128,7 +129,29 @@ def get_documents_from_database():
 @app.put("/documents/{document_id}")
 def update_document_details(document_id: int, new_filename: str):
 
-    updated = update_document(document_id, new_filename)
+    document = get_document_by_id(document_id)
+
+    if not document:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    new_filename = os.path.basename(new_filename)
+
+    if not new_filename.lower().endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Only PDF files are allowed")
+
+    old_path = document["file_path"]
+    new_path = os.path.join(os.path.dirname(old_path), new_filename)
+
+    if not os.path.exists(old_path):
+        raise HTTPException(status_code=404, detail="PDF file not found")
+
+    if old_path != new_path:
+        if os.path.exists(new_path):
+            raise HTTPException(status_code=400, detail="File with this name already exists")
+
+        os.rename(old_path, new_path)
+
+    updated = update_document(document_id, new_filename, new_path)
 
     if not updated:
         raise HTTPException(status_code=404, detail="Document not found")
@@ -142,12 +165,22 @@ def update_document_details(document_id: int, new_filename: str):
 @app.delete("/documents/{document_id}")
 def delete_document_details(document_id: int):
 
+    document = get_document_by_id(document_id)
+
+    if not document:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    file_path = document["file_path"]
+
+    if os.path.exists(file_path):
+        os.remove(file_path)
+
     deleted = delete_document(document_id)
 
     if not deleted:
         raise HTTPException(status_code=404, detail="Document not found")
 
     return {
-        "message": "Document deleted successfully",
+        "message": "Document and its file deleted successfully",
         "document_id": document_id
     }
