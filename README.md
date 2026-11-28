@@ -1,114 +1,90 @@
-## Current Progress
+## Frontend & Backend Integration – Day 11
 
-### Completed
+The NoteBridge frontend is now integrated with the FastAPI backend, providing a simple and user-friendly interface for managing PDF documents.
 
-- Initial project and backend setup
-- FastAPI application configuration
-- PDF upload API (`POST /upload`)
-- Uploaded PDF listing API (`GET /pdfs`)
-- PDF viewing API (`GET /pdfs/{filename}`)
-- PDF deletion API (`DELETE /pdfs/{filename}`)
-- Filename and file type validation
-- Empty file and invalid PDF validation
-- Duplicate filename handling
-- PDF deletion error handling
-- SQLite database integration
-- Document record creation and retrieval
-- Document update and deletion using database IDs
-- Synchronization of PDF filenames and file paths during updates
-- Deletion of both PDF files and their database records
-- API documentation using Swagger UI
-- API testing using Swagger UI
-- GitHub version control and project updates
+### Frontend Features
 
-### In Progress
+- Clean and responsive user interface.
+- Peaceful sage-green and ivory colour theme.
+- PDF document upload.
+- Display uploaded documents.
+- View PDF documents in the browser.
+- Delete documents.
+- Refresh the document list.
 
-- Improving backend functionality
-- Frontend development
+### Technologies Used
 
-### Planned
+- **Frontend:** HTML, CSS, JavaScript
+- **Backend:** Python, FastAPI
+- **Database:** SQLite
+- **Server:** Uvicorn
+- **Version Control:** Git and GitHub
 
-- Student-friendly interface
-- Note sharing functionality
-- Additional testing and validation
-- Integration of frontend with backend
-- AI-powered document question-answering functionality
+### Frontend–Backend Integration
 
----
+The frontend communicates with the FastAPI backend using JavaScript Fetch API.
 
-## Day 10 Implementation
+| Operation | API Endpoint | Method |
+|---|---|---|
+| Open application | `/` | GET |
+| Upload PDF | `/upload` | POST |
+| List PDFs | `/pdfs` | GET |
+| View PDF | `/pdfs/{filename}` | GET |
+| Delete PDF | `/pdfs/{filename}` | DELETE |
+| Retrieve database records | `/documents` | GET |
+| Update document | `/documents/{id}` | PUT |
+| Delete document and database record | `/documents/{id}` | DELETE |
 
-### Backend Development and API Integration
+### Project Structure
 
-The backend was improved to connect PDF file operations with database records.
+```text
+NoteBridge/
+│
+├── backend/
+│   ├── main.py
+│   ├── database.py
+│   └── verify_database.py
+│
+├── frontend/
+│   └── index.html
+│
+├── uploads/
+├── notebridge.db
+└── README.md
+```
 
-### Document Management APIs
+### Running the Application
 
-**1. GET `/documents`**
+1. Activate the Python virtual environment.
+2. Install the required dependencies.
+3. Start the FastAPI server:
 
-- Retrieves all document records stored in the database.
-- Returns document details and the total number of records.
+```bash
+uvicorn backend.main:app --reload
+```
 
-**2. PUT `/documents/{document_id}`**
+4. Open the application:
 
-- Updates a document using its database ID.
-- Validates the new PDF filename.
-- Renames the actual PDF file.
-- Updates both the filename and file path in the database.
-- Handles missing documents and duplicate filenames.
+```text
+http://127.0.0.1:8000/
+```
 
-**3. DELETE `/documents/{document_id}`**
+5. Access the API documentation:
 
-- Finds the document using its database ID.
-- Deletes the corresponding PDF file if it exists.
-- Removes the document record from the database.
-- Handles requests for non-existing document IDs.
+```text
+http://127.0.0.1:8000/docs
+```
 
-### Testing Results
+### Testing
 
-The following operations were tested using Swagger UI:
+The following functionalities have been tested:
 
-- Successfully uploaded a PDF and stored its details in SQLite.
-- Retrieved document information using the GET API.
-- Renamed a PDF using the PUT API.
-- Verified that both the physical filename and database file path were updated.
-- Deleted a PDF using the document ID.
-- Verified that the corresponding database record was removed.
-- Verified that the deleted PDF was no longer present in the uploaded PDF list.
-- Tested invalid file uploads and received appropriate 400 error responses.
-- Tested deletion of a non-existing document and received a 404 error response.
+- PDF uploading and validation.
+- File storage.
+- SQLite database insertion.
+- Document listing.
+- PDF viewing.
+- Document deletion from both file storage and database.
+- Frontend and backend communication.
 
-All the above tested operations returned the expected results.
-
-### API Endpoints
-
-| Method | Endpoint                   | Purpose                              |
-| ------ | -------------------------- | ------------------------------------ |
-| GET    | `/`                        | Welcome message                      |
-| POST   | `/upload`                  | Upload a PDF                         |
-| GET    | `/pdfs`                    | List uploaded PDFs                   |
-| GET    | `/pdfs/{filename}`         | View a PDF                           |
-| DELETE | `/pdfs/{filename}`         | Delete a PDF by filename             |
-| GET    | `/documents`               | Retrieve database records            |
-| PUT    | `/documents/{document_id}` | Rename a PDF and update its record   |
-| DELETE | `/documents/{document_id}` | Delete a PDF and its database record |
-
-### Tools and Technologies Used
-
-- Python
-- FastAPI
-- SQLite
-- SQL
-- Swagger UI
-- Git and GitHub
-
----
-
-## Future Improvements
-
-- Develop a student-friendly frontend.
-- Integrate the frontend with the existing backend APIs.
-- Implement note-sharing functionality.
-- Store user questions and AI-generated answers.
-- Implement relationships between documents, questions, and answers.
-- Explore AI-based document question-answering features.
+**Current Status:** Frontend and backend integration completed and tested as part of Phase 1 – Day 11 of the UNAI TECH Virtual Internship Program 2026.
