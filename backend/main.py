@@ -22,7 +22,7 @@ if not os.path.exists(UPLOAD_FOLDER):
 
 @app.get("/")
 def home():
-    return {"message": "Welcome to NoteBridge!"}
+    return FileResponse("frontend/index.html")
 
 @app.post("/upload")
 async def upload_pdf(file: UploadFile = File(...)):

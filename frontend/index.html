@@ -1,0 +1,436 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteBridge | Your Document Space</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f5f6f0;
+            color: #34483b;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #e7ede3;
+            padding: 25px 8%;
+            border-bottom: 1px solid #dce4d8;
+        }
+
+        .brand {
+            font-size: 27px;
+            font-weight: 700;
+            color: #355642;
+        }
+
+        .tagline {
+            color: #758576;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 55px auto;
+            padding: 0 22px;
+        }
+
+        .welcome {
+            margin-bottom: 30px;
+        }
+
+        .welcome h1 {
+            font-size: 30px;
+            color: #355642;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            color: #788579;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 28px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            border: 1px solid #e5e9e1;
+            box-shadow: 0 5px 20px rgba(53, 86, 66, 0.04);
+        }
+
+        h2 {
+            font-size: 19px;
+            color: #355642;
+            margin-bottom: 18px;
+        }
+
+        .upload-area {
+            background: #f7f9f5;
+            border: 2px dashed #cbd9c9;
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .upload-area p {
+            color: #788579;
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
+
+        input[type="file"] {
+            max-width: 100%;
+            margin-bottom: 18px;
+            color: #647568;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .primary-btn {
+            background: #52765c;
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background: #3e6049;
+        }
+
+        .secondary-btn {
+            background: #eaf0e7;
+            color: #46634c;
+        }
+
+        .secondary-btn:hover {
+            background: #dce7d9;
+        }
+
+        .delete-btn {
+            background: #f8eeeb;
+            color: #a65d50;
+            padding: 8px 13px;
+        }
+
+        .delete-btn:hover {
+            background: #f2ded8;
+        }
+
+        #message {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #52765c;
+        }
+
+        .document-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .document-header h2 {
+            margin-bottom: 0;
+        }
+
+        #pdfList {
+            list-style: none;
+        }
+
+        #pdfList li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            border: 1px solid #edf0e9;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background: #fcfdfb;
+        }
+
+        .file-name {
+            color: #45644c;
+            text-decoration: none;
+            overflow-wrap: anywhere;
+        }
+
+        .file-name:hover {
+            text-decoration: underline;
+        }
+
+        .empty {
+            color: #929c91;
+            text-align: center;
+            padding: 25px;
+            font-size: 14px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #929c91;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            main {
+                margin: 35px auto;
+            }
+
+            .welcome h1 {
+                font-size: 25px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="brand">NoteBridge</div>
+        <div class="tagline">A peaceful space for your documents</div>
+    </header>
+
+    <main>
+
+        <section class="welcome">
+            <h1>Your documents, beautifully organised.</h1>
+            <p>Keep your important PDF files together in one simple space.</p>
+        </section>
+
+        <section class="card">
+
+            <h2>Upload a document</h2>
+
+            <div class="upload-area">
+
+                <p>Select a PDF document to add to your collection.</p>
+
+                <input type="file" id="pdfFile" accept=".pdf">
+
+                <br>
+
+                <button class="primary-btn" id="uploadButton" onclick="uploadPDF()">
+                    Upload PDF
+                </button>
+
+            </div>
+
+            <p id="message" role="status" aria-live="polite"></p>
+
+        </section>
+
+        <section class="card">
+
+            <div class="document-header">
+
+                <h2>Your documents</h2>
+
+                <button class="secondary-btn" onclick="loadPDFs()">
+                    Refresh
+                </button>
+
+            </div>
+
+            <ul id="pdfList">
+                <li class="empty">Loading documents...</li>
+            </ul>
+
+        </section>
+
+    </main>
+
+    <footer>
+        NoteBridge · Your personal document space
+    </footer>
+
+    <script>
+
+        const API_URL = window.location.origin;
+
+
+        // Upload PDF
+        async function uploadPDF() {
+
+            const fileInput = document.getElementById("pdfFile");
+            const message = document.getElementById("message");
+            const uploadButton = document.getElementById("uploadButton");
+
+            if (fileInput.files.length === 0) {
+                message.innerText = "Please select a PDF file.";
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            try {
+
+                uploadButton.disabled = true;
+                message.innerText = "Uploading...";
+
+                const response = await fetch(`${API_URL}/upload`, {
+                    method: "POST",
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.detail || "Upload failed");
+                }
+
+                message.innerText = result.message;
+
+                fileInput.value = "";
+
+                await loadPDFs();
+
+            } catch (error) {
+
+                message.innerText = error.message;
+
+            } finally {
+
+                uploadButton.disabled = false;
+
+            }
+        }
+
+
+        // Load documents from database
+        
+async function loadPDFs() {
+
+    const pdfList = document.getElementById("pdfList");
+
+    try {
+
+        pdfList.innerHTML =
+            '<li class="empty">Loading documents...</li>';
+
+        const response = await fetch(`${API_URL}/documents`);
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error("Unable to load documents");
+        }
+
+        pdfList.innerHTML = "";
+
+        if (result.documents.length === 0) {
+
+            pdfList.innerHTML =
+                '<li class="empty">No documents yet. Upload your first PDF!</li>';
+
+            return;
+        }
+
+        result.documents.forEach(item => {
+
+            const li = document.createElement("li");
+
+            const viewLink = document.createElement("a");
+
+            viewLink.href =
+                `${API_URL}/pdfs/${encodeURIComponent(item.filename)}`;
+
+            viewLink.innerText = item.filename;
+            viewLink.className = "file-name";
+            viewLink.target = "_blank";
+            viewLink.rel = "noopener noreferrer";
+
+            const deleteButton = document.createElement("button");
+
+            deleteButton.innerText = "Delete";
+            deleteButton.className = "delete-btn";
+
+            deleteButton.onclick = () => deletePDF(item.id);
+
+            li.appendChild(viewLink);
+            li.appendChild(deleteButton);
+
+            pdfList.appendChild(li);
+
+        });
+
+    } catch (error) {
+
+        pdfList.innerText = error.message;
+
+    }
+}
+
+
+
+        // Delete document from database and storage
+        async function deletePDF(documentId) {
+
+            if (!confirm("Are you sure you want to delete this PDF?")) {
+                return;
+            }
+
+            try {
+
+                const response = await fetch(
+                    `${API_URL}/documents/${documentId}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.detail || "Delete failed");
+                }
+
+                document.getElementById("message").innerText =
+                    result.message;
+
+                await loadPDFs();
+
+            } catch (error) {
+
+                document.getElementById("message").innerText =
+                    error.message;
+
+            }
+        }
+
+
+        // Load documents when page opens
+        loadPDFs();
+
+    </script>
+
+</body>
+
+</html>
